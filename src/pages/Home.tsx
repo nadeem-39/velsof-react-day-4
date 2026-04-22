@@ -30,6 +30,14 @@ const Home = (): ReactElement => {
       >
         Add new Book
       </p>
+      <p
+        className="p-2 mt-10 border rounded w-40 text-center"
+        onClick={() => {
+          navigate("/users");
+        }}
+      >
+        Users...
+      </p>
     </div>
   );
 };

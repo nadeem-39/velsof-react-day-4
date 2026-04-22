@@ -34,7 +34,7 @@ const StudentList = (): ReactElement => {
     useLocalStorage("lastSearch", "");
 
   const {
-    data: bookData,
+    data: studentData,
     isLoading,
     error,
   } = useQuery({
@@ -47,10 +47,10 @@ const StudentList = (): ReactElement => {
   });
 
   useEffect(() => {
-    if (bookData) {
-      setCurrStudentData(bookData.data.slice(0, 50));
+    if (studentData) {
+      setCurrStudentData(studentData.data.slice(0, 50));
     }
-  }, [bookData]);
+  }, [studentData]);
 
   // updating student data array which is rendering in table,
   // and updatig search value inside the box via searchValue hook.
