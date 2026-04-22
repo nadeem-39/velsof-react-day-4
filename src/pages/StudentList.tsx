@@ -1,7 +1,8 @@
-import { useEffect, useState, type ReactElement } from "react"
-import * as SutdentData from "../data/studentsList.json"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useLocalStorage } from "usehooks-ts"
+import { useEffect, useState, type ReactElement } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLocalStorage } from "usehooks-ts";
+import { useQuery } from "@tanstack/react-query";
+import instance from "@/lib/api";
 
 import {
   Table,
@@ -11,95 +12,84 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button";
 
-import { Button } from "@/components/ui/button"
-import DialogComponent from "@/components/localComponents/StudentEditDialog"
-import { Input } from "@/components/ui/input"
-import { string } from "zod"
-
+import { Input } from "@/components/ui/input";
 type StudentDataTemplate = {
-  id: number
-  title: string
-  age: number
-}
+  id: number;
+  title: string;
+  age: number;
+};
 
 const StudentList = (): ReactElement => {
-  let [view, setView] = useState<boolean>(true)
-  let [studentForEdit, setStudentForEdit] =
-    useState<StudentDataTemplate | null>(null)
-  let [open, setOpen] = useState<boolean>(false)
-  let [searchValue, setSearchValue] = useState<String>("")
-  let [currStudentData, setCurrStudentData] = useState<StudentDataTemplate[]>()
-  let [searachStudent, setSearchStudent] = useState<
+  let [view, setView] = useState<boolean>(true);
+  let [searchValue, setSearchValue] = useState<String>("");
+  let [currStudentData, setCurrStudentData] = useState<StudentDataTemplate[]>();
+  let [searchStudent, setSearchStudent] = useState<
     StudentDataTemplate[] | null
-  >()
-  let [
-    searchValueInLocalStorage,
-    setSearchValueInLocalStorage,
-    removeSearchValueInLocalStorage,
-  ] = useLocalStorage("lastSearch", "")
+  >();
+  let [searchValueInLocalStorage, setSearchValueInLocalStorage] =
+    useLocalStorage("lastSearch", "");
 
-  let processedData = JSON.stringify(SutdentData)
-  let allData = JSON.parse(processedData)
-  let finalData: StudentDataTemplate[] = allData.data
+  const {
+    data: bookData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryFn: async () =>
+      await instance({
+        url: "/student",
+        method: "get",
+      }),
+    queryKey: ["students"],
+  });
 
-  let first50StudentData = finalData.slice(0, 50)
+  useEffect(() => {
+    if (bookData) {
+      setCurrStudentData(bookData.data.slice(0, 50));
+    }
+  }, [bookData]);
 
   // updating student data array which is rendering in table,
   // and updatig search value inside the box via searchValue hook.
   useEffect(() => {
-    setCurrStudentData(first50StudentData)
-    setSearchValue(searchValueInLocalStorage)
-  }, [])
-
-  function deleteStudent(student: StudentDataTemplate): void {
-    setCurrStudentData(
-      currStudentData?.filter((s) => (s.id === student.id ? false : true))
-    )
-  }
+    setSearchValue(searchValueInLocalStorage);
+  }, []);
 
   let [studentVisible, setStudentVisible] =
-    useState<StudentDataTemplate | null>(null)
+    useState<StudentDataTemplate | null>(null);
 
   const showStudentDetails = (id: number, title: string, age: number): void => {
-    setStudentVisible({ id, title, age })
-    console.log(studentVisible)
-  }
+    setStudentVisible({ id, title, age });
+    console.log(studentVisible);
+  };
 
-  // searach student function
+  // search student function
 
-  function searchStudent(studentName: String): void {
+  function searchStudentFunction(studentName: String): void {
     setSearchStudent(
       currStudentData?.filter(
-        (s) => s.title.toLowerCase() === studentName.toLowerCase()
-      )
-    )
+        (s) =>
+          studentName !== "" &&
+          s.title.toLowerCase().includes(studentName.toLowerCase()),
+      ),
+    );
   }
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      searchStudent(searchValue)
-      setSearchValueInLocalStorage(() => searchValue + "")
-      console.log(searchValue)
-    }, 300)
+      searchStudentFunction(searchValue);
+      setSearchValueInLocalStorage(() => searchValue + "");
+      console.log(searchValue);
+    }, 300);
 
-    return () => clearTimeout(timeout)
-  }, [searchValue])
+    return () => clearTimeout(timeout);
+  }, [searchValue]);
 
-  //   console.log(first50SutdentData);
+  if (isLoading) return <span>Loading...</span>;
+  if (error) return <span>Error please try again</span>;
 
   return (
     <div className="place-items-center">
@@ -124,25 +114,12 @@ const StudentList = (): ReactElement => {
             <Button
               className="bg-blue-500 text-white"
               onClick={() => {
-                setStudentVisible(null)
+                setStudentVisible(null);
               }}
             >
               Close
             </Button>
           </Card>
-        )}
-      </div>
-      <div className="dialog-for-edit">
-        {studentForEdit && (
-          <DialogComponent
-            {...{
-              id: studentForEdit.id,
-              title: studentForEdit.title,
-              age: studentForEdit.age,
-              open: open,
-              setOpen: setOpen,
-            }}
-          />
         )}
       </div>
       <div className="mt-20 flex justify-center">
@@ -154,25 +131,16 @@ const StudentList = (): ReactElement => {
                 className="w-3/12"
                 placeholder="Enter Student Name"
                 onChange={(e) => {
-                  setSearchValue(e.target.value)
+                  setSearchValue(e.target.value);
                 }}
                 value={searchValue + ""}
               ></Input>
             </CardContent>
-            {/* may be two student with same name  */}
-            {searachStudent?.map((e, idx) => {
-              return (
-                <CardContent key={idx}>
-                  name: {e.title} &nbsp; &nbsp; id: {e.id} &nbsp; &nbsp; age:{" "}
-                  {e.age}
-                </CardContent>
-              )
-            })}
 
             <Button
               className="border-1-black m-auto w-25 bg-blue-500 text-white"
               onClick={() => {
-                setView(!view)
+                setView(!view);
               }}
             >
               {view ? "Hide list" : "View list"}{" "}
@@ -193,16 +161,13 @@ const StudentList = (): ReactElement => {
                     <TableHead className="w-50 text-center">
                       Student Age
                     </TableHead>
-                    <TableHead className="w-50 text-center">
-                      Edit Button
-                    </TableHead>
-                    <TableHead className="w-50 text-center">
-                      Delete Button
-                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {first50StudentData.map((student) => (
+                  {(searchStudent && searchStudent?.length > 0
+                    ? searchStudent
+                    : currStudentData
+                  )?.map((student) => (
                     <TableRow
                       key={student.id}
                       className={student.id & 1 ? "" : "bg-gray-300"}
@@ -216,62 +181,14 @@ const StudentList = (): ReactElement => {
                           showStudentDetails(
                             student.id,
                             student.title,
-                            student.age
-                          )
+                            student.age,
+                          );
                         }}
                       >
                         {student.title}
                       </TableCell>
                       <TableCell className="text-center">
                         {student.age}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Button
-                          key={student.id}
-                          className="bg-green-500 text-white"
-                          onClick={() => {
-                            setStudentForEdit({
-                              id: student.id,
-                              title: student.title,
-                              age: student.age,
-                            })
-                            setOpen(true)
-
-                            console.log(student)
-                          }}
-                        >
-                          Edit
-                        </Button>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <AlertDialog>
-                          <AlertDialogTrigger>
-                            <Button
-                              key={student.id}
-                              className="bg-red-800 text-white"
-                              onClick={() => {}}
-                            >
-                              Delete
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Are you sure you want to delete {student.title}
-                              </AlertDialogTitle>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => {
-                                  deleteStudent(student)
-                                }}
-                              >
-                                Continue
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -284,7 +201,7 @@ const StudentList = (): ReactElement => {
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default StudentList
+export default StudentList;

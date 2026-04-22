@@ -1,78 +1,81 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/field";
+import { Button } from "@/components/ui/button";
 
-import { Input } from "@/components/ui/input"
-import { toast } from "sonner"
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import instance from "@/lib/api";
 
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group"
+import { useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useForm, Controller } from "react-hook-form"
-import type { SubmitHandler } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-
-import * as z from "zod"
+import * as z from "zod";
 
 const schema = z.object({
-  bookId: z
+  id: z
     .number()
     .min(1, "Book Id can not be less than 1")
-    .max(3210, "Book Id can not be geater than 3210"),
-  bookAuthor: z
+    .max(1000000, "Book Id can not be geater than 3210"),
+  author: z
     .string()
     .min(3, "Book Author name must be at least 3 characters.")
     .max(32, "Book Author name must be at most 32 characters."),
-  bookTitle: z
+  title: z
     .string()
     .min(8, "Book Title must be at least 8 characters")
     .max(32, "Book Title must be at most 32 characters"),
-})
+});
 
-type formSchema = z.infer<typeof schema>
+type formSchema = z.infer<typeof schema>;
 
 const BookAddForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting, isValid },
-    setError,
-    reset,
-  } = useForm<formSchema>({
-    // defaultValues: {
-    //   bookId: 0,
-    //   bookAuthor: "",
-    //   bookTitle: "",
-    // },
-    resolver: zodResolver(schema),
-  })
+  const { register, handleSubmit, formState, setError, getFieldState, reset } =
+    useForm<formSchema>({
+      resolver: zodResolver(schema),
+      mode: "onChange",
+    });
+
   const onSubmit: SubmitHandler<formSchema> = async (data) => {
+    // toast("Your form in under submit");
+
     try {
       await new Promise((resolve) => {
-        setTimeout(resolve, 1000)
-      })
-      console.log(data)
+        setTimeout(resolve, 1000);
+      });
+      addBookMutation.mutate(data);
     } catch (error) {
-      setError("root", { message: "Error in Book ID" })
+      setError("root", { message: "Error in Book ID" });
     }
-  }
+  };
+
+  const queryClient = useQueryClient();
+
+  const addBookMutation = useMutation({
+    mutationFn: (newBook: formSchema) =>
+      instance.post(`/book`, {
+        id: String(newBook.id),
+        author: newBook.author,
+        title: newBook.title,
+      }),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      toast.success("Book added successfully");
+      reset();
+    },
+
+    onError: () => {
+      toast.error("Failed to add book");
+    },
+  });
 
   return (
     <div className="mt-10 flex justify-center text-center">
@@ -89,13 +92,15 @@ const BookAddForm = () => {
                   <FieldLabel htmlFor="book-id">Book ID</FieldLabel>
                   <Input
                     id="book-id"
-                    {...register("bookId", { valueAsNumber: true })}
+                    {...register("id", { valueAsNumber: true })}
                     placeholder="Enter Book id"
                     type="number"
                   ></Input>
-                  {errors.bookId?.message && (
+                  {(formState.errors.root?.message ||
+                    getFieldState("id").invalid) && (
                     <FieldError className="text-red-500">
-                      {errors.bookId.message}
+                      {formState.errors?.id?.message ||
+                        "Id can not be less than 1"}
                     </FieldError>
                   )}
                 </Field>
@@ -103,13 +108,15 @@ const BookAddForm = () => {
                   <FieldLabel htmlFor="book-title">Book Title</FieldLabel>
                   <Input
                     id="book-title"
-                    {...register("bookTitle")}
+                    {...register("title")}
                     placeholder="Enter Title "
                     type="text"
                   ></Input>
-                  {errors.bookTitle?.message && (
+                  {(formState.errors.root?.message ||
+                    getFieldState("title").invalid) && (
                     <FieldError className="text-red-500">
-                      {errors.bookTitle.message}
+                      {formState.errors?.title?.message ||
+                        "Book name can not be less than 8 char"}
                     </FieldError>
                   )}
                 </Field>
@@ -117,17 +124,19 @@ const BookAddForm = () => {
                   <FieldLabel htmlFor="book-author">Author Name</FieldLabel>
                   <Input
                     id="book-author"
-                    {...register("bookAuthor")}
+                    {...register("author")}
                     placeholder="Enter book author's name"
                     title="text"
                   ></Input>
-                  {errors.bookAuthor?.message && (
+                  {(formState.errors.root?.message ||
+                    getFieldState("author").invalid) && (
                     <FieldError className="text-red-500">
-                      {errors.bookAuthor.message}
+                      {formState.errors?.author?.message ||
+                        "Author name can not be less than 3 char"}
                     </FieldError>
                   )}
-                  {errors.root?.message && (
-                    <FieldError>Please enter book author's name</FieldError>
+                  {formState.errors.root?.message && (
+                    <FieldError>{formState.errors?.author?.message}</FieldError>
                   )}
                 </Field>
               </FieldGroup>
@@ -135,7 +144,7 @@ const BookAddForm = () => {
             <Button
               className="border-1-black mt-5 mr-10 w-25 bg-blue-500 text-white"
               onClick={() => {
-                reset()
+                reset();
               }}
             >
               Reset
@@ -143,16 +152,16 @@ const BookAddForm = () => {
             <Button
               className="border-1-black mt-5 w-25 bg-blue-500 text-white"
               type="submit"
-              disabled={isSubmitting || !isValid}
+              disabled={formState.isSubmitting || !formState.isValid}
             >
               {" "}
-              {isSubmitting ? "Loading" : "Submit"}{" "}
+              {formState.isSubmitting ? "Loading" : "Submit"}{" "}
             </Button>
           </form>
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default BookAddForm
+export default BookAddForm;
