@@ -57,11 +57,6 @@ const StudentList = (): ReactElement => {
     }
   }, [studentData]);
 
-  const showStudentDetails = (id: number, title: string, age: number): void => {
-    setStudentVisible({ id, title, age });
-    console.log(studentVisible);
-  };
-
   // search student function
 
   function searchStudentFunction(studentName: string): void {
@@ -177,6 +172,7 @@ const StudentList = (): ReactElement => {
                       <TableHead className="w-50 text-center">
                         Student Age
                       </TableHead>
+                      <TableHead className="w-50 text-center">View</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -189,16 +185,19 @@ const StudentList = (): ReactElement => {
                           <TableCell className="text-center">
                             {student.id}
                           </TableCell>
+                          <TableCell className="text-center">
+                            {student.title}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            {student.age}
+                          </TableCell>
                           <TableCell
                             className="text-center cursor-pointer"
                             onClick={() => {
                               navigate(`/student/${student.id}`);
                             }}
                           >
-                            {student.title}
-                          </TableCell>
-                          <TableCell className="text-center">
-                            {student.age}
+                            view
                           </TableCell>
                         </TableRow>
                       ),
