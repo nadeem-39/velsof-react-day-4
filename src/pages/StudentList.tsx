@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLocalStorage } from "usehooks-ts";
 import { useQuery } from "@tanstack/react-query";
 import instance from "@/lib/api";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useNavigate } from "react-router-dom";
 
 import {
   Table,
@@ -25,13 +27,16 @@ type StudentDataTemplate = {
 
 const StudentList = (): ReactElement => {
   let [view, setView] = useState<boolean>(true);
-  let [searchValue, setSearchValue] = useState<String>("");
+  let navigate = useNavigate();
   let [currStudentData, setCurrStudentData] = useState<StudentDataTemplate[]>();
-  let [searchStudent, setSearchStudent] = useState<
-    StudentDataTemplate[] | null
-  >();
+  let [searchStudent, setSearchStudent] = useState<StudentDataTemplate[]>([]);
   let [searchValueInLocalStorage, setSearchValueInLocalStorage] =
     useLocalStorage("lastSearch", "");
+  let [searchValue, setSearchValue] = useState<string>(
+    searchValueInLocalStorage,
+  );
+  let [studentVisible, setStudentVisible] =
+    useState<StudentDataTemplate | null>(null);
 
   const {
     data: studentData,
@@ -52,15 +57,6 @@ const StudentList = (): ReactElement => {
     }
   }, [studentData]);
 
-  // updating student data array which is rendering in table,
-  // and updatig search value inside the box via searchValue hook.
-  useEffect(() => {
-    setSearchValue(searchValueInLocalStorage);
-  }, []);
-
-  let [studentVisible, setStudentVisible] =
-    useState<StudentDataTemplate | null>(null);
-
   const showStudentDetails = (id: number, title: string, age: number): void => {
     setStudentVisible({ id, title, age });
     console.log(studentVisible);
@@ -68,27 +64,38 @@ const StudentList = (): ReactElement => {
 
   // search student function
 
-  function searchStudentFunction(studentName: String): void {
+  function searchStudentFunction(studentName: string): void {
     setSearchStudent(
       currStudentData?.filter(
         (s) =>
           studentName !== "" &&
           s.title.toLowerCase().includes(studentName.toLowerCase()),
-      ),
+      ) || [],
     );
   }
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       searchStudentFunction(searchValue);
-      setSearchValueInLocalStorage(() => searchValue + "");
+      setSearchValueInLocalStorage(() => searchValue);
       console.log(searchValue);
     }, 300);
 
     return () => clearTimeout(timeout);
   }, [searchValue]);
 
-  if (isLoading) return <span>Loading...</span>;
+  if (isLoading)
+    return (
+      <div className="flex  m-auto w-9/12 mt-50 flex-col gap-2">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div className="flex gap-4" key={index}>
+            <Skeleton className="h-4 flex-1 bg-gray-300" />
+            <Skeleton className="h-4 w-24 bg-gray-300" />
+            <Skeleton className="h-4 w-20 bg-gray-300" />
+          </div>
+        ))}
+      </div>
+    );
   if (error) return <span>Error please try again</span>;
 
   return (
@@ -123,12 +130,12 @@ const StudentList = (): ReactElement => {
         )}
       </div>
       <div className="mt-20 flex justify-center">
-        <Card className="p-4">
+        <Card className="p-4 w-full">
           <CardHeader className="items-center text-center">
             <CardTitle className="text-4xl font-bold">Students List</CardTitle>
             <CardContent>
               <Input
-                className="w-3/12"
+                className=""
                 placeholder="Enter Student Name"
                 onChange={(e) => {
                   setSearchValue(e.target.value);
@@ -138,7 +145,7 @@ const StudentList = (): ReactElement => {
             </CardContent>
 
             <Button
-              className="border-1-black m-auto w-25 bg-blue-500 text-white"
+              className="border-1-black m-auto w-25 bg-blue-500 text-white cursor-pointer"
               onClick={() => {
                 setView(!view);
               }}
@@ -146,55 +153,60 @@ const StudentList = (): ReactElement => {
               {view ? "Hide list" : "View list"}{" "}
             </Button>
           </CardHeader>
-          {view ? (
-            <CardContent>
-              <Table>
-                <TableCaption>A list of 50 Students.</TableCaption>
-                <TableHeader>
-                  <TableRow className="bg-gray-400">
-                    <TableHead className="w-50 text-center">
-                      Student ID
-                    </TableHead>
-                    <TableHead className="w-50 text-center">
-                      Student Name
-                    </TableHead>
-                    <TableHead className="w-50 text-center">
-                      Student Age
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {(searchStudent && searchStudent?.length > 0
-                    ? searchStudent
-                    : currStudentData
-                  )?.map((student) => (
-                    <TableRow
-                      key={student.id}
-                      className={student.id & 1 ? "" : "bg-gray-300"}
-                    >
-                      <TableCell className="text-center">
-                        {student.id}
-                      </TableCell>
-                      <TableCell
-                        className="text-center"
-                        onClick={() => {
-                          showStudentDetails(
-                            student.id,
-                            student.title,
-                            student.age,
-                          );
-                        }}
-                      >
-                        {student.title}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {student.age}
-                      </TableCell>
+          {searchValue && searchStudent.length == 0 ? (
+            <p>No Student matched your search.</p>
+          ) : view ? (
+            <>
+              {searchValue && (
+                <p>
+                  Showing {searchStudent.length} of{" "}
+                  {currStudentData?.length}{" "}
+                </p>
+              )}
+              <CardContent>
+                <Table>
+                  <TableCaption>A list of 50 Students.</TableCaption>
+                  <TableHeader>
+                    <TableRow className="bg-gray-400">
+                      <TableHead className="w-50 text-center">
+                        Student ID
+                      </TableHead>
+                      <TableHead className="w-50 text-center">
+                        Student Name
+                      </TableHead>
+                      <TableHead className="w-50 text-center">
+                        Student Age
+                      </TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
+                  </TableHeader>
+                  <TableBody>
+                    {(searchValue ? searchStudent : currStudentData)?.map(
+                      (student) => (
+                        <TableRow
+                          key={student.id}
+                          className={student.id & 1 ? "" : "bg-gray-300"}
+                        >
+                          <TableCell className="text-center">
+                            {student.id}
+                          </TableCell>
+                          <TableCell
+                            className="text-center cursor-pointer"
+                            onClick={() => {
+                              navigate(`/student/${student.id}`);
+                            }}
+                          >
+                            {student.title}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            {student.age}
+                          </TableCell>
+                        </TableRow>
+                      ),
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </>
           ) : (
             <p>Click above button to view Student list</p>
           )}

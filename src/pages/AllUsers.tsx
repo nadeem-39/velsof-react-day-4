@@ -4,6 +4,7 @@ import { useLocalStorage } from "usehooks-ts";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { userInstance } from "@/lib/api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import {
   Table,
@@ -100,7 +101,18 @@ const AllUsers = (): ReactElement => {
     return () => clearTimeout(timeout);
   }, [searchValue]);
 
-  if (isLoading) return <span>Loading...</span>;
+  if (isLoading)
+    return (
+      <div className="flex  m-auto w-9/12 mt-50 flex-col gap-2">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div className="flex gap-4" key={index}>
+            <Skeleton className="h-4 flex-1 bg-gray-300" />
+            <Skeleton className="h-4 w-24 bg-gray-300" />
+            <Skeleton className="h-4 w-20 bg-gray-300" />
+          </div>
+        ))}
+      </div>
+    );
   if (error) return <span>Error please try again</span>;
 
   return (
