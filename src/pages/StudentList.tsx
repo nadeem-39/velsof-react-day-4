@@ -31,9 +31,9 @@ const StudentList = (): ReactElement => {
   let [currStudentData, setCurrStudentData] = useState<StudentDataTemplate[]>();
   let [searchStudent, setSearchStudent] = useState<StudentDataTemplate[]>([]);
   let [searchValueInLocalStorage, setSearchValueInLocalStorage] =
-    useLocalStorage("lastSearch", "");
+    useLocalStorage("lastSearchStudent", "");
   let [searchValue, setSearchValue] = useState<string>(
-    searchValueInLocalStorage,
+    searchValueInLocalStorage || "",
   );
   let [studentVisible, setStudentVisible] =
     useState<StudentDataTemplate | null>(null);
@@ -182,13 +182,15 @@ const StudentList = (): ReactElement => {
                           key={student.id}
                           className={student.id & 1 ? "" : "bg-gray-300"}
                         >
-                          <TableCell className="text-center">
+                          <TableCell className="text-right">
                             {student.id}
                           </TableCell>
-                          <TableCell className="text-center">
+                          <TableCell className="text-right">
                             {student.title}
                           </TableCell>
-                          <TableCell className="text-center">
+                          <TableCell
+                            className={`text-right ${student.age > 20 ? "bg-red-400" : "bg-amber-400"}`}
+                          >
                             {student.age}
                           </TableCell>
                           <TableCell

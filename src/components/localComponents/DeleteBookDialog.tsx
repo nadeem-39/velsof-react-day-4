@@ -21,8 +21,7 @@ interface bookDataTemplate {
 const DeleteBookDialog = (book: bookDataTemplate): ReactElement => {
   const queryClient = useQueryClient();
   const deleteStudentMutatation = useMutation({
-    mutationFn: (id: Number) => instance.delete(`/book/${id}`),
-
+    mutationFn: (id: number) => instance.delete(`/book/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["books"] });
       toast(`Successfully deleted`, {

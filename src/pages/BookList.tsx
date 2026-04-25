@@ -65,7 +65,7 @@ const BookList = (): ReactElement => {
   if (error) return <span>Error please try again</span>;
 
   return (
-    <div className="mt-20 flex justify-center">
+    <div className="mt-10 flex justify-center mr-5 ">
       <Card className="p-4">
         <CardHeader className="items-center text-center">
           <CardTitle className="text-4xl font-bold">Books List</CardTitle>

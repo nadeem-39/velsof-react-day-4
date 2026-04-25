@@ -21,7 +21,10 @@ import * as z from "zod";
 
 const schema = z.object({
   id: z
-    .number()
+    .number({
+      error: (issue) =>
+        issue.code === "invalid_type" ? "Enter Id properly" : "",
+    })
     .min(1, "Book Id can not be less than 1")
     .max(1000000, "Book Id can not be geater than 3210"),
   author: z
@@ -92,7 +95,9 @@ const BookAddForm = () => {
                   <FieldLabel htmlFor="book-id">Book ID</FieldLabel>
                   <Input
                     id="book-id"
-                    {...register("id", { valueAsNumber: true })}
+                    {...register("id", {
+                      valueAsNumber: true,
+                    })}
                     placeholder="Enter Book id"
                     type="number"
                   ></Input>
@@ -126,7 +131,7 @@ const BookAddForm = () => {
                     id="book-author"
                     {...register("author")}
                     placeholder="Enter book author's name"
-                    title="text"
+                    type="text"
                   ></Input>
                   {(formState.errors.root?.message ||
                     getFieldState("author").invalid) && (

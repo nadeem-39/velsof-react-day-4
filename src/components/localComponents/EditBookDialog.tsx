@@ -69,7 +69,7 @@ const EditBookDialog = (book: bookDataTemplate): ReactElement => {
   const EditBookMutation = useMutation({
     mutationFn: (editBook: formSchema) =>
       instance.put(`/book/${editBook.id}`, {
-        id: String(editBook.id),
+        id: editBook.id,
         author: editBook.author,
         title: editBook.title,
       }),
@@ -83,7 +83,7 @@ const EditBookDialog = (book: bookDataTemplate): ReactElement => {
     },
 
     onError: () => {
-      toast(`Field to edit`, {
+      toast(`Failed to edit`, {
         position: "top-center",
       });
     },
@@ -131,7 +131,7 @@ const EditBookDialog = (book: bookDataTemplate): ReactElement => {
                 type="number"
                 defaultValue={book.id}
               ></Input>
-              {errors.root?.message && (
+              {errors.id && (
                 <FieldError className="text-red-500">
                   {errors?.id?.message || "Id can not be less than 1"}
                 </FieldError>
@@ -146,7 +146,7 @@ const EditBookDialog = (book: bookDataTemplate): ReactElement => {
                 type="text"
                 defaultValue={book.title}
               ></Input>
-              {errors.root?.message && (
+              {errors.title && (
                 <FieldError className="text-red-500">
                   {errors?.title?.message ||
                     "Book name can not be less than 8 char"}
@@ -162,15 +162,13 @@ const EditBookDialog = (book: bookDataTemplate): ReactElement => {
                 title="text"
                 defaultValue={book.author}
               ></Input>
-              {errors.root?.message && (
+              {errors.author && (
                 <FieldError className="text-red-500">
                   {errors?.author?.message ||
                     "Author name can not be less than 3 char"}
                 </FieldError>
               )}
-              {errors.root?.message && (
-                <FieldError>{errors?.author?.message}</FieldError>
-              )}
+              {errors.root && <FieldError>{errors?.root?.message}</FieldError>}
             </Field>
           </FieldGroup>
           <Button
