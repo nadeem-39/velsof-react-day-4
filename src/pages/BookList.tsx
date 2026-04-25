@@ -3,6 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import DeleteBookDialog from "@/components/localComponents/DeleteBookDialog";
 import EditBookDialog from "@/components/localComponents/EditBookDialog";
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+  getSortedRowModel,
+  type SortingState,
+  type ColumnDef,
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -17,38 +25,105 @@ import {
 import { Button } from "@/components/ui/button";
 import instance from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
+import { Input } from "@base-ui/react";
 
-interface bookDataTemplate {
+type bookDataTemplate = {
   author: string;
   id: number;
   title: string;
-}
+};
+type BooksResponse = {
+  data: bookDataTemplate[];
+  total: number;
+};
 
 const BookList = (): ReactElement => {
   let [view, setView] = useState<boolean>(true);
-  let [first50BookData, setFirst50BookData] = useState<bookDataTemplate[]>();
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [sorting, setSorting] = useState<SortingState>([]);
 
-  const {
-    data: bookData,
-    isLoading,
-    error,
-  } = useQuery({
-    queryFn: async () =>
-      await instance({
-        url: "/book",
-        method: "get",
-      }),
-    queryKey: ["books"],
+  const [globalFilter, setGlobalFilter] = useState("");
+
+  const fetchBooks = async (
+    pageIndex: number,
+    pageSize: number,
+    search: string,
+  ): Promise<BooksResponse> => {
+    const res = await instance({
+      params: {
+        _page: pageIndex + 1,
+        _limit: pageSize,
+        _sort: sorting[0]?.id,
+        _order: sorting[0]?.desc ? "desc" : "asc",
+        q: search,
+      },
+      url: "/book",
+      method: "get",
+    });
+    return {
+      data: res.data, // array
+      total: Number(res.headers["x-total-count"]),
+    };
+  };
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: [
+      "books",
+      pagination.pageIndex,
+      pagination.pageSize,
+      globalFilter,
+    ],
+    queryFn: () =>
+      fetchBooks(pagination.pageIndex, pagination.pageSize, globalFilter),
+    placeholderData: (prev) => prev,
   });
 
+  const columns: ColumnDef<bookDataTemplate>[] = [
+    { accessorKey: "id", header: "ID", enableSorting: true },
+    { accessorKey: "title", header: "Title", enableSorting: true },
+    { accessorKey: "author", header: "Author", enableSorting: true },
+    {
+      id: "edit",
+      header: "Edit",
+      cell: ({ row }) => {
+        const book = row.original;
+        return <EditBookDialog {...book}>Edit</EditBookDialog>;
+      },
+    },
+    {
+      id: "delete",
+      header: "Delete",
+      cell: ({ row }) => {
+        const book = row.original;
+        return <DeleteBookDialog {...book}>Delete</DeleteBookDialog>;
+      },
+    },
+  ];
   useEffect(() => {
-    if (bookData) {
-      bookData.data.sort(
-        (a: bookDataTemplate, b: bookDataTemplate) => a.id - b.id,
-      );
-      setFirst50BookData(bookData.data.slice(0, 50));
-    }
-  }, [bookData]);
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: 0,
+    }));
+  }, [globalFilter]);
+
+  const table = useReactTable<bookDataTemplate>({
+    data: data?.data ?? [],
+    columns,
+    pageCount: Math.ceil((data?.total || 0) / pagination.pageSize),
+
+    state: { pagination, sorting },
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    manualPagination: true,
+    manualFiltering: true,
+  });
 
   if (isLoading)
     return (
@@ -80,44 +155,99 @@ const BookList = (): ReactElement => {
         </CardHeader>
         {view ? (
           <CardContent>
+            <Input
+              className={"border rounded m-2 p-1"}
+              value={globalFilter}
+              onChange={(e) => setGlobalFilter(e.target.value)}
+              placeholder="Search books..."
+            />
+            <select
+              className={"border rounded m-2 p-1"}
+              value={pagination.pageSize}
+              onChange={(e) => {
+                setPagination((prev) => ({
+                  ...prev,
+                  pageSize: Number(e.target.value),
+                  pageIndex: 0,
+                }));
+              }}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
             <Table>
-              <TableCaption>A list of 50 books.</TableCaption>
               <TableHeader>
-                <TableRow className="bg-gray-400">
-                  <TableHead className="w-50 text-center">Book ID</TableHead>
-                  <TableHead className="w-50 text-center">
-                    Book Author
-                  </TableHead>
-                  <TableHead className="w-50 text-center">Book Title</TableHead>
-                  <TableHead className="w-50 text-center">Edit Book</TableHead>
-                  <TableHead className="w-50 text-center">
-                    Delete Book
-                  </TableHead>
-                </TableRow>
+                {table.getHeaderGroups().map((hg) => (
+                  <TableRow key={hg.id} className="bg-gray-400">
+                    {hg.headers.map((header) => (
+                      <TableHead
+                        className="w-50 text-center"
+                        key={header.id}
+                        onClick={header.column.getToggleSortingHandler()}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+
+                        {header.column.getIsSorted() === "asc" && " 🔼"}
+                        {header.column.getIsSorted() === "desc" && " 🔽"}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
               </TableHeader>
               <TableBody>
-                {first50BookData?.map((book) => (
-                  <TableRow
-                    key={book.id}
-                    className={book.id & 1 ? "" : "bg-gray-300"}
-                  >
-                    <TableCell className="font-medium">{book.id}</TableCell>
-                    <TableCell className="text-center">{book.author}</TableCell>
-                    <TableCell className="text-right">{book.title}</TableCell>
-
-                    <TableCell className="text-center ">
-                      <EditBookDialog {...book} />
-                    </TableCell>
-                    <TableCell className="text-center ">
-                      <DeleteBookDialog {...book} />
-                    </TableCell>
+                <TableRow className="text-center p-2">
+                  {table.getRowModel().rows.length === 0 && "No data found"}
+                </TableRow>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className="font-medium text-center"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
+            {/* pagination */}
+            <div className="flex justify-between mt-5">
+              <Button
+                className={"bg-gray-300"}
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Prev
+              </Button>
+
+              <span>
+                {" "}
+                Page {pagination.pageIndex + 1} of{" "}
+                {Math.ceil((data?.total || 0) / pagination.pageSize)}
+              </span>
+
+              <Button
+                className={"bg-gray-300"}
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Next
+              </Button>
+            </div>
           </CardContent>
         ) : (
-          <p>Click above button to view Book list</p>
+          <p>Click above Button to view Book list</p>
         )}
       </Card>
     </div>

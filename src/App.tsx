@@ -5,6 +5,7 @@ import BookRoutes from "./Routes/BookRoutes";
 import UserRoutes from "./Routes/UsersRoutes";
 import { useRoutes } from "react-router-dom";
 import NavBar from "./components/localComponents/navBar";
+import BookTable from "./pages/BookTable";
 function App() {
   return (
     <div className="main flex ">
@@ -17,6 +18,7 @@ function App() {
           { path: "/student/*", element: <StudentRoutes /> },
           { path: "/book/*", element: <BookRoutes /> },
           { path: "/user/*", element: <UserRoutes /> },
+          { path: "/bookTable", element: <BookTable /> },
           { path: "/*", element: <Error404 /> },
         ])}
       </div>
