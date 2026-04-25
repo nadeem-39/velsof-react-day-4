@@ -4,7 +4,7 @@ import StudentRoutes from "./Routes/StudentRoutes";
 import BookRoutes from "./Routes/BookRoutes";
 import UserRoutes from "./Routes/UsersRoutes";
 import { useRoutes } from "react-router-dom";
-import NavBar from "./components/localComponents/navBar";
+import NavBar from "./components/localComponents/NavBar";
 
 function App() {
   return (
