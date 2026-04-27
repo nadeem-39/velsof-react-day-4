@@ -82,7 +82,7 @@ const BookAddForm = () => {
 
   return (
     <div className="mt-10 flex justify-center text-center">
-      <Card className="w-full max-w-md">
+      <Card className="w-150">
         <CardHeader>
           <CardContent className="font-bold">Book Form</CardContent>
         </CardHeader>

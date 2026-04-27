@@ -53,7 +53,7 @@ const StudentProfile = () => {
 
   return (
     <div>
-      <Card className="w-9/12 m-auto mt-10">
+      <Card className="w-100 m-auto mt-10">
         <CardHeader>
           <CardTitle>
             Id:

@@ -35,8 +35,6 @@ const StudentList = (): ReactElement => {
   let [searchValue, setSearchValue] = useState<string>(
     searchValueInLocalStorage || "",
   );
-  let [studentVisible, setStudentVisible] =
-    useState<StudentDataTemplate | null>(null);
 
   const {
     data: studentData,
@@ -95,35 +93,6 @@ const StudentList = (): ReactElement => {
 
   return (
     <div className="place-items-center">
-      <div>
-        {studentVisible && view && (
-          <Card className="fixed top-4/12 left-140 z-50 w-95 bg-white p-20">
-            <CardHeader className="">
-              <CardTitle className="font-bold">Student Information</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              Student ID: &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;{" "}
-              {studentVisible.id}
-            </CardContent>
-            <CardContent className="p-0">
-              Student Name: &nbsp; &nbsp; &nbsp; &nbsp;{" "}
-              {studentVisible.title}{" "}
-            </CardContent>
-            <CardContent className="p-0">
-              Student Age: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{" "}
-              {studentVisible.age}{" "}
-            </CardContent>
-            <Button
-              className="bg-blue-500 text-white"
-              onClick={() => {
-                setStudentVisible(null);
-              }}
-            >
-              Close
-            </Button>
-          </Card>
-        )}
-      </div>
       <div className="mt-20 flex justify-center">
         <Card className="p-4 w-full">
           <CardHeader className="items-center text-center">

@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import DeleteBookDialog from "@/components/localComponents/DeleteBookDialog";
 import EditBookDialog from "@/components/localComponents/EditBookDialog";
+
 import {
   useReactTable,
   getCoreRowModel,
@@ -25,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import instance from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@base-ui/react";
+import { tableQueryParams } from "@/lib/tableQueryParams";
 
 type bookDataTemplate = {
   author: string;
@@ -37,11 +39,17 @@ type BooksResponse = {
 };
 
 const BookList = (): ReactElement => {
+  const { page, limit, sort, search, updateParams } = tableQueryParams();
   let [view, setView] = useState<boolean>(true);
   const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
+    pageIndex: page,
+    pageSize: limit,
   });
+
+  // console.log(page, limit);
+
+  console.log(pagination.pageIndex, pagination.pageSize);
+
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -53,7 +61,7 @@ const BookList = (): ReactElement => {
   ): Promise<BooksResponse> => {
     const res = await instance({
       params: {
-        _page: pageIndex + 1,
+        _page: pageIndex,
         _limit: pageSize,
         _sort: sorting[0]?.id,
         _order: sorting[0]?.desc ? "desc" : "asc",
@@ -101,6 +109,8 @@ const BookList = (): ReactElement => {
       },
     },
   ];
+
+  // to set the page 0 and starting from 0 to n
   useEffect(() => {
     setPagination((prev) => ({
       ...prev,
@@ -164,10 +174,11 @@ const BookList = (): ReactElement => {
               className={"border rounded m-2 p-1"}
               value={pagination.pageSize}
               onChange={(e) => {
+                updateParams({ limit: e.target.value });
                 setPagination((prev) => ({
                   ...prev,
                   pageSize: Number(e.target.value),
-                  pageIndex: 0,
+                  pageIndex: page,
                 }));
               }}
             >
@@ -224,7 +235,10 @@ const BookList = (): ReactElement => {
             <div className="flex justify-between mt-5">
               <Button
                 className={"bg-gray-300"}
-                onClick={() => table.previousPage()}
+                onClick={() => {
+                  updateParams({ page: page - 1 });
+                  return table.previousPage();
+                }}
                 disabled={!table.getCanPreviousPage()}
               >
                 Prev
@@ -238,7 +252,10 @@ const BookList = (): ReactElement => {
 
               <Button
                 className={"bg-gray-300"}
-                onClick={() => table.nextPage()}
+                onClick={() => {
+                  updateParams({ page: page + 1 });
+                  return table.nextPage();
+                }}
                 disabled={!table.getCanNextPage()}
               >
                 Next

@@ -100,7 +100,7 @@ const UserAccount = () => {
 
   return (
     <div>
-      <Card className="w-9/12 m-auto mt-10">
+      <Card className="w-150 m-auto mt-10">
         <CardHeader>
           <CardTitle>{currUserData?.name}</CardTitle>
           <CardDescription>

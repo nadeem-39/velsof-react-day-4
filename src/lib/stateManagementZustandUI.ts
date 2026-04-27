@@ -12,11 +12,9 @@ type UiState = {
 export const stateManagementZustandUI = create<UiState>()(
   persist(
     (set) => ({
-      // state
       sidebarCollapsed: true,
       lastVisitedPage: "",
 
-      // actions
       toggleSidebar: () =>
         set((state) => ({
           sidebarCollapsed: !state.sidebarCollapsed,

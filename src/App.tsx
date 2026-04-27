@@ -5,23 +5,30 @@ import BookRoutes from "./Routes/BookRoutes";
 import UserRoutes from "./Routes/UsersRoutes";
 import { useRoutes } from "react-router-dom";
 import NavBar from "./components/localComponents/NavBar";
+import Login from "./pages/Login";
+import AuthNavbar from "./components/localComponents/AuthNavbar";
 
 function App() {
   return (
-    <div className="main flex ">
-      <div className="w-3/12">
-        <NavBar />
+    <>
+      {" "}
+      <AuthNavbar></AuthNavbar>
+      <div className="main flex ">
+        <div className="w-3/12">
+          <NavBar />
+        </div>
+        <div>
+          {useRoutes([
+            { path: "/", element: <Home /> },
+            { path: "/login", element: <Login /> },
+            { path: "/student/*", element: <StudentRoutes /> },
+            { path: "/book/*", element: <BookRoutes /> },
+            { path: "/user/*", element: <UserRoutes /> },
+            { path: "/*", element: <Error404 /> },
+          ])}
+        </div>
       </div>
-      <div>
-        {useRoutes([
-          { path: "/", element: <Home /> },
-          { path: "/student/*", element: <StudentRoutes /> },
-          { path: "/book/*", element: <BookRoutes /> },
-          { path: "/user/*", element: <UserRoutes /> },
-          { path: "/*", element: <Error404 /> },
-        ])}
-      </div>
-    </div>
+    </>
   );
 }
 

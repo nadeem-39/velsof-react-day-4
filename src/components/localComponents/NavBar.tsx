@@ -49,7 +49,7 @@ const NavBar = (): ReactElement => {
             Student list
           </Button>
           <Button
-            className="p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer"
+            className={`p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer `}
             onClick={() => {
               navigate("/book/list");
               setLastVisitedPage("/book/list");
