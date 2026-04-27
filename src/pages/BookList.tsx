@@ -52,7 +52,7 @@ const BookList = (): ReactElement => {
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter, setGlobalFilter] = useState(search);
 
   const fetchBooks = async (
     pageIndex: number,
@@ -114,7 +114,7 @@ const BookList = (): ReactElement => {
   useEffect(() => {
     setPagination((prev) => ({
       ...prev,
-      pageIndex: 0,
+      pageIndex: page,
     }));
   }, [globalFilter]);
 
@@ -167,7 +167,10 @@ const BookList = (): ReactElement => {
             <Input
               className={"border rounded m-2 p-1"}
               value={globalFilter}
-              onChange={(e) => setGlobalFilter(e.target.value)}
+              onChange={(e) => {
+                setGlobalFilter(e.target.value);
+                updateParams({ search: e.target.value });
+              }}
               placeholder="Search books..."
             />
             <select
