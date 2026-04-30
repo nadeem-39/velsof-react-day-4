@@ -11,6 +11,12 @@ export const userInstance = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+export const notesInstance = axios.create({
+  baseURL: "http://localhost:4000/api",
+  timeout: 1000,
+  headers: { "Content-Type": "application/json" },
+});
+
 instance.interceptors.request.use((config) => {
   const token = getAccessToken();
   if (token) {

@@ -26,7 +26,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
 
       login: (user, token) => {
-        accessToken = token; // store in closure
+        accessToken = token;
         set({ user, isAuthenticated: true });
       },
 

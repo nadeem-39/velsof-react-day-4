@@ -7,6 +7,7 @@ import { useRoutes } from "react-router-dom";
 import NavBar from "./components/localComponents/NavBar";
 import Login from "./pages/Login";
 import AuthNavbar from "./components/localComponents/AuthNavbar";
+import NotesRoutes from "./Routes/NotesRoute";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             { path: "/student/*", element: <StudentRoutes /> },
             { path: "/book/*", element: <BookRoutes /> },
             { path: "/user/*", element: <UserRoutes /> },
+            { path: "/notes/*", element: <NotesRoutes /> },
             { path: "/*", element: <Error404 /> },
           ])}
         </div>

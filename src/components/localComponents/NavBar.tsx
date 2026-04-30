@@ -75,6 +75,25 @@ const NavBar = (): ReactElement => {
           >
             Users...
           </Button>
+          <Button
+            className="p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer"
+            onClick={() => {
+              navigate("/notes/list");
+              setLastVisitedPage("/notes/list");
+            }}
+          >
+            Notes List
+          </Button>
+
+          <Button
+            className="p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer"
+            onClick={() => {
+              navigate("/notes/addNewNote");
+              setLastVisitedPage("/notes/addNewNote");
+            }}
+          >
+            Notes Form
+          </Button>
 
           <Button
             className="p-2 mt-10 border rounded w-40 text-center bg-red-100 m-auto cursor-pointer"

@@ -39,7 +39,7 @@ type BooksResponse = {
 };
 
 const BookList = (): ReactElement => {
-  const { page, limit, sort, search, updateParams } = tableQueryParams();
+  const { page, limit, search, updateParams } = tableQueryParams();
   let [view, setView] = useState<boolean>(true);
   const [pagination, setPagination] = useState({
     pageIndex: page,
