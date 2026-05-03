@@ -25,7 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import instance from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { Input } from "@base-ui/react";
+import { Input } from "@/components/ui/input";
 import { tableQueryParams } from "@/lib/tableQueryParams";
 
 type bookDataTemplate = {
@@ -97,7 +97,7 @@ const BookList = (): ReactElement => {
       header: "Edit",
       cell: ({ row }) => {
         const book = row.original;
-        return <EditBookDialog {...book}>Edit</EditBookDialog>;
+        return <EditBookDialog {...book}>✏️</EditBookDialog>;
       },
     },
     {
@@ -105,7 +105,7 @@ const BookList = (): ReactElement => {
       header: "Delete",
       cell: ({ row }) => {
         const book = row.original;
-        return <DeleteBookDialog {...book}>Delete</DeleteBookDialog>;
+        return <DeleteBookDialog {...book}>🚫</DeleteBookDialog>;
       },
     },
   ];
@@ -139,9 +139,9 @@ const BookList = (): ReactElement => {
       <div className="flex  m-auto w-9/12 mt-50 flex-col gap-2">
         {Array.from({ length: 5 }).map((_, index) => (
           <div className="flex gap-4" key={index}>
-            <Skeleton className="h-4 flex-1 bg-gray-300" />
-            <Skeleton className="h-4 w-24 bg-gray-300" />
-            <Skeleton className="h-4 w-20 bg-gray-300" />
+            <Skeleton className="h-4 flex-1 bg-gray-400" />
+            <Skeleton className="h-4 w-24 bg-gray-400" />
+            <Skeleton className="h-4 w-20 bg-gray-400" />
           </div>
         ))}
       </div>
@@ -149,12 +149,12 @@ const BookList = (): ReactElement => {
   if (error) return <span>Error please try again</span>;
 
   return (
-    <div className="mt-10 flex justify-center mr-5 ">
-      <Card className="p-4">
+    <div className=" flex justify-center ">
+      <Card className="p-4 ring-0 bg-gray-100">
         <CardHeader className="items-center text-center">
           <CardTitle className="text-4xl font-bold">Books List</CardTitle>
           <Button
-            className="border-1-black m-auto w-25 bg-blue-500 text-white cursor-pointer"
+            className=" m-auto w-25 bg-blue-500 text-white cursor-pointer"
             onClick={() => {
               setView(!view);
             }}
@@ -165,16 +165,16 @@ const BookList = (): ReactElement => {
         {view ? (
           <CardContent>
             <Input
-              className={"border rounded m-2 p-1"}
+              className=" w-50 border-gray-300"
               value={globalFilter}
               onChange={(e) => {
                 setGlobalFilter(e.target.value);
                 updateParams({ search: e.target.value });
               }}
               placeholder="Search books..."
-            />
+            ></Input>
             <select
-              className={"border rounded m-2 p-1"}
+              className={" border border-gray-300 rounded m-2 p-2"}
               value={pagination.pageSize}
               onChange={(e) => {
                 updateParams({ limit: e.target.value });
@@ -193,7 +193,7 @@ const BookList = (): ReactElement => {
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((hg) => (
-                  <TableRow key={hg.id} className="bg-gray-400">
+                  <TableRow key={hg.id} className="bg-black text-white">
                     {hg.headers.map((header) => (
                       <TableHead
                         className="w-50 text-center"
@@ -218,7 +218,7 @@ const BookList = (): ReactElement => {
                   {table.getRowModel().rows.length === 0 && "No data found"}
                 </TableRow>
                 {table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id}>
+                  <TableRow key={row.id} className="border-gray-200">
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
@@ -237,7 +237,7 @@ const BookList = (): ReactElement => {
             {/* pagination */}
             <div className="flex justify-between mt-5">
               <Button
-                className={"bg-gray-300"}
+                className={"bg-green-700 text-white "}
                 onClick={() => {
                   updateParams({ page: page - 1 });
                   return table.previousPage();
@@ -254,7 +254,7 @@ const BookList = (): ReactElement => {
               </span>
 
               <Button
-                className={"bg-gray-300"}
+                className={"bg-green-700 text-white "}
                 onClick={() => {
                   updateParams({ page: page + 1 });
                   return table.nextPage();

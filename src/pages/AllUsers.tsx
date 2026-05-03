@@ -103,9 +103,9 @@ const AllUsers = (): ReactElement => {
       <div className="flex  m-auto w-9/12 mt-50 flex-col gap-2">
         {Array.from({ length: 5 }).map((_, index) => (
           <div className="flex gap-4" key={index}>
-            <Skeleton className="h-4 flex-1 bg-gray-300" />
-            <Skeleton className="h-4 w-24 bg-gray-300" />
-            <Skeleton className="h-4 w-20 bg-gray-300" />
+            <Skeleton className="h-4 flex-1 bg-gray-400" />
+            <Skeleton className="h-4 w-24 bg-gray-400" />
+            <Skeleton className="h-4 w-20 bg-gray-400" />
           </div>
         ))}
       </div>
@@ -114,29 +114,29 @@ const AllUsers = (): ReactElement => {
 
   return (
     <div className="place-items-center">
-      <div className="mt-20 flex justify-center">
-        <Card className="p-4">
+      <div className="flex justify-center ">
+        <Card className="p-4 ring-0 w-250 bg-gray-100">
           <CardHeader className="items-center text-center">
             <CardTitle className="text-4xl font-bold">User List</CardTitle>
-            <CardContent>
+
+            <CardContent className="flex justify-between">
               <Input
-                className=""
-                placeholder="Enter User Name"
+                className="w-50 border-gray-300"
+                placeholder="Enter Student Name"
                 onChange={(e) => {
                   setSearchValue(e.target.value);
                 }}
-                value={searchValue}
+                value={searchValue + ""}
               ></Input>
+              <Button
+                className=" w-25 bg-blue-500 text-white cursor-pointer"
+                onClick={() => {
+                  setView(!view);
+                }}
+              >
+                {view ? "Hide list" : "View list"}{" "}
+              </Button>
             </CardContent>
-
-            <Button
-              className="border-1-black m-auto w-25 bg-blue-500 text-white"
-              onClick={() => {
-                setView(!view);
-              }}
-            >
-              {view ? "Hide list" : "View list"}{" "}
-            </Button>
           </CardHeader>
           {searchValue && searchUser.length == 0 ? (
             <p>No User matched your search.</p>
@@ -152,7 +152,7 @@ const AllUsers = (): ReactElement => {
                 <Table>
                   <TableCaption>Users Table</TableCaption>
                   <TableHeader>
-                    <TableRow className="bg-gray-400">
+                    <TableRow className="bg-black text-white">
                       <TableHead className="w-50 text-center">Name</TableHead>
                       <TableHead className="w-50 text-center">Email</TableHead>
                       <TableHead className="w-50 text-center">
@@ -165,10 +165,7 @@ const AllUsers = (): ReactElement => {
                   </TableHeader>
                   <TableBody>
                     {(searchValue ? searchUser : currUserData)?.map((User) => (
-                      <TableRow
-                        key={User.id}
-                        className={User.id & 1 ? "" : "bg-gray-300"}
-                      >
+                      <TableRow key={User.id} className="border-gray-200">
                         <TableCell className="text-center">
                           {User.name}
                         </TableCell>
@@ -189,7 +186,7 @@ const AllUsers = (): ReactElement => {
                               navigate(`/user/${User.id}`);
                             }}
                           >
-                            {"->"}
+                            🗂️
                           </Button>
                         </TableCell>
                       </TableRow>

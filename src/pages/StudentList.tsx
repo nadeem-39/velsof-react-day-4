@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -93,29 +92,28 @@ const StudentList = (): ReactElement => {
 
   return (
     <div className="place-items-center">
-      <div className="mt-20 flex justify-center">
-        <Card className="p-4 w-full">
+      <div className="mt-5 flex justify-center">
+        <Card className="p-4 w-250 ring-0 bg-gray-100">
           <CardHeader className="items-center text-center">
             <CardTitle className="text-4xl font-bold">Students List</CardTitle>
-            <CardContent>
+            <CardContent className="flex justify-between">
               <Input
-                className=""
+                className="w-50 border-gray-300"
                 placeholder="Enter Student Name"
                 onChange={(e) => {
                   setSearchValue(e.target.value);
                 }}
                 value={searchValue + ""}
               ></Input>
+              <Button
+                className=" w-25 bg-blue-500 text-white cursor-pointer"
+                onClick={() => {
+                  setView(!view);
+                }}
+              >
+                {view ? "Hide list" : "View list"}{" "}
+              </Button>
             </CardContent>
-
-            <Button
-              className="border-1-black m-auto w-25 bg-blue-500 text-white cursor-pointer"
-              onClick={() => {
-                setView(!view);
-              }}
-            >
-              {view ? "Hide list" : "View list"}{" "}
-            </Button>
           </CardHeader>
           {searchValue && searchStudent.length == 0 ? (
             <p>No Student matched your search.</p>
@@ -127,11 +125,10 @@ const StudentList = (): ReactElement => {
                   {currStudentData?.length}{" "}
                 </p>
               )}
-              <CardContent>
+              <CardContent className="overflow-y-auto h-full">
                 <Table>
-                  <TableCaption>A list of 50 Students.</TableCaption>
-                  <TableHeader>
-                    <TableRow className="bg-gray-400">
+                  <TableHeader className="sticky top-0 ">
+                    <TableRow className="bg-black text-white">
                       <TableHead className="w-50 text-center">
                         Student ID
                       </TableHead>
@@ -149,17 +146,16 @@ const StudentList = (): ReactElement => {
                       (student) => (
                         <TableRow
                           key={student.id}
-                          className={student.id & 1 ? "" : "bg-gray-300"}
+                          className="border-gray-200"
+                          // className={student.id & 1 ? "" : "bg-gray-300 "}
                         >
-                          <TableCell className="text-right">
+                          <TableCell className="text-center">
                             {student.id}
                           </TableCell>
-                          <TableCell className="text-right">
+                          <TableCell className="text-center">
                             {student.title}
                           </TableCell>
-                          <TableCell
-                            className={`text-right ${student.age > 20 ? "bg-red-400" : "bg-amber-400"}`}
-                          >
+                          <TableCell className={`text-center `}>
                             {student.age}
                           </TableCell>
                           <TableCell
@@ -168,7 +164,14 @@ const StudentList = (): ReactElement => {
                               navigate(`/student/${student.id}`);
                             }}
                           >
-                            view
+                            <Button
+                              className={
+                                "bg-green-500 text-white w-10 h-5 text-xs"
+                              }
+                            >
+                              {" "}
+                              view
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ),
@@ -176,6 +179,7 @@ const StudentList = (): ReactElement => {
                   </TableBody>
                 </Table>
               </CardContent>
+              <p className="text-center">A list of 50 students</p>
             </>
           ) : (
             <p>Click above button to view Student list</p>

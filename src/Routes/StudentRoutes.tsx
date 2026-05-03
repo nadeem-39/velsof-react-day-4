@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import StudentList from "@/pages/StudentList";
 import StudentProfile from "@/pages/StudentProfile";
 import ProtectedRoute from "./ProtectedRoutes";
+
 const StudentRoutes = () => {
   return (
     <Routes>

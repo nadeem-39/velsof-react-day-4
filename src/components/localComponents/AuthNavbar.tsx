@@ -12,7 +12,7 @@ export default function AuthNavbar() {
   };
 
   return (
-    <div className="flex justify-between p-4 bg-gray-200">
+    <div className="flex justify-between p-4 text-white">
       <div>Welcome, {user?.name}</div>
 
       <button onClick={handleLogout}>Logout</button>

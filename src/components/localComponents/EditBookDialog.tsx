@@ -32,17 +32,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 const schema = z.object({
   id: z
-    .number()
+    .number({
+      error: (issue) =>
+        issue.code === "invalid_type" ? "Enter Id properly" : "",
+    })
     .min(1, "Book Id can not be less than 1")
     .max(1000000, "Book Id can not be geater than 3210"),
   author: z
     .string()
     .min(3, "Book Author name must be at least 3 characters.")
-    .max(32, "Book Author name must be at most 32 characters."),
+    .max(320, "Book Author name must be at most 32 characters."),
   title: z
     .string()
     .min(8, "Book Title must be at least 8 characters")
-    .max(32, "Book Title must be at most 32 characters"),
+    .max(320, "Book Title must be at most 32 characters"),
 });
 
 type formSchema = z.infer<typeof schema>;
@@ -64,6 +67,7 @@ const EditBookDialog = (book: bookDataTemplate): ReactElement => {
     reset,
   } = useForm<formSchema>({
     resolver: zodResolver(schema),
+    mode: "onChange",
   });
 
   const EditBookMutation = useMutation({
@@ -106,16 +110,12 @@ const EditBookDialog = (book: bookDataTemplate): ReactElement => {
     <Dialog>
       <DialogTrigger
         render={
-          <Button
-            onClick={() => reset()}
-            variant="outline"
-            className={"cursor-pointer"}
-          >
-            Edit
+          <Button onClick={() => reset()} className={"cursor-pointer"}>
+            ✏️
           </Button>
         }
       />
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent className="sm:max-w-sm bg-white">
         <DialogHeader>
           <DialogTitle>Edit Book </DialogTitle>
           <DialogDescription>Make changes in Book Data</DialogDescription>
@@ -159,7 +159,7 @@ const EditBookDialog = (book: bookDataTemplate): ReactElement => {
                 id="book-author"
                 {...register("author")}
                 placeholder="Enter book author's name"
-                title="text"
+                type="text"
                 defaultValue={book.author}
               ></Input>
               {errors.author && (

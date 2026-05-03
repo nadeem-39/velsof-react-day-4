@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoutes";
 import NotesList from "@/pages/notesList";
 import NotesAddForm from "@/pages/createNotes";
+
 const NotesRoutes = () => {
   return (
     <Routes>

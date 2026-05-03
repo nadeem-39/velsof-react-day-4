@@ -82,9 +82,9 @@ const BookAddForm = () => {
 
   return (
     <div className="mt-10 flex justify-center text-center">
-      <Card className="w-150">
+      <Card className="w-150 ring-0 bg-gray-100">
         <CardHeader>
-          <CardContent className="font-bold">Book Form</CardContent>
+          <CardContent className="font-bold ">Book Form</CardContent>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>

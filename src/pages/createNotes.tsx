@@ -92,7 +92,7 @@ const NotesAddForm = () => {
 
   return (
     <div className="mt-10 flex justify-center text-center">
-      <Card className="w-150">
+      <Card className="w-150 ring-0 bg-gray-200">
         <CardHeader>
           <CardContent className="font-bold">Notes Form</CardContent>
         </CardHeader>

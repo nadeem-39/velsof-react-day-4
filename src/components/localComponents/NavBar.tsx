@@ -19,19 +19,31 @@ const NavBar = (): ReactElement => {
 
   const navigate = useNavigate();
   return (
-    <div className="ml-5 mt-5 mr-2 sidebar w-8/12">
+    <div className="ml-2 mt-5 mr-2 sidebar w-8/12">
       {!sidebarCollapsed && (
         <Button
-          className={"p-2 border rounded w-40 text-center cursor-pointer "}
+          className={" rounded  text-left cursor-pointer "}
           onClick={() => toggleSidebar()}
         >
-          Open side bar
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            fill="currentColor"
+            className="bi bi-list"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+            />
+          </svg>
         </Button>
       )}
       {sidebarCollapsed && (
-        <div className="bg-gray-300 p-5 rounded w-full ">
+        <div className=" p-5 rounded w-full ">
           <Button
-            className="p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer"
+            className="p-2 mt-2 rounded w-40 text-left m-auto cursor-pointer"
             onClick={() => {
               navigate("/");
               setLastVisitedPage("/");
@@ -40,7 +52,7 @@ const NavBar = (): ReactElement => {
             Home
           </Button>
           <Button
-            className="p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
             onClick={() => {
               navigate("/student/list");
               setLastVisitedPage("/student/list");
@@ -49,7 +61,7 @@ const NavBar = (): ReactElement => {
             Student list
           </Button>
           <Button
-            className={`p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer `}
+            className={`p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer `}
             onClick={() => {
               navigate("/book/list");
               setLastVisitedPage("/book/list");
@@ -58,7 +70,7 @@ const NavBar = (): ReactElement => {
             Book list
           </Button>
           <Button
-            className="p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
             onClick={() => {
               navigate("/book/addNewBook");
               setLastVisitedPage("/book/addNewBook");
@@ -67,7 +79,7 @@ const NavBar = (): ReactElement => {
             Add new Book
           </Button>
           <Button
-            className="p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
             onClick={() => {
               navigate("/user/allUsers");
               setLastVisitedPage("/user/allUsers");
@@ -76,7 +88,7 @@ const NavBar = (): ReactElement => {
             Users...
           </Button>
           <Button
-            className="p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
             onClick={() => {
               navigate("/notes/list");
               setLastVisitedPage("/notes/list");
@@ -86,7 +98,7 @@ const NavBar = (): ReactElement => {
           </Button>
 
           <Button
-            className="p-2 mt-10 border rounded w-40 text-center m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
             onClick={() => {
               navigate("/notes/addNewNote");
               setLastVisitedPage("/notes/addNewNote");
@@ -96,7 +108,7 @@ const NavBar = (): ReactElement => {
           </Button>
 
           <Button
-            className="p-2 mt-10 border rounded w-40 text-center bg-red-100 m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
             onClick={() => {
               toggleSidebar();
             }}

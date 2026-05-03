@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Error404 = (): ReactElement => {
   const navigate = useNavigate();
   return (
-    <div className="border-2 rounded m-auto mt-50 flex flex-col justify-center items-center w-4/12 ">
+    <div className="border-2 rounded m-auto mt-50 flex flex-col justify-center items-center w-200 ">
       <p className="font-bold text-9xl text-red-800">404</p>
       <p>Page not found</p>
       <button

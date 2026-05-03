@@ -78,9 +78,9 @@ const NotesList = (): ReactElement => {
       <div className="flex  m-auto w-9/12 mt-50 flex-col gap-2">
         {Array.from({ length: 5 }).map((_, index) => (
           <div className="flex gap-4" key={index}>
-            <Skeleton className="h-4 flex-1 bg-gray-300" />
-            <Skeleton className="h-4 w-24 bg-gray-300" />
-            <Skeleton className="h-4 w-20 bg-gray-300" />
+            <Skeleton className="h-4 flex-1 bg-gray-400" />
+            <Skeleton className="h-4 w-24 bg-gray-400" />
+            <Skeleton className="h-4 w-20 bg-gray-400" />
           </div>
         ))}
       </div>

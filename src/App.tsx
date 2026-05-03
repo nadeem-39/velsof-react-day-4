@@ -10,27 +10,36 @@ import AuthNavbar from "./components/localComponents/AuthNavbar";
 import NotesRoutes from "./Routes/NotesRoute";
 
 function App() {
+  const routes = useRoutes([
+    { path: "/", element: <Home /> },
+    { path: "/login", element: <Login /> },
+    { path: "/student/*", element: <StudentRoutes /> },
+    { path: "/book/*", element: <BookRoutes /> },
+    { path: "/user/*", element: <UserRoutes /> },
+    { path: "/notes/*", element: <NotesRoutes /> },
+    { path: "/*", element: <Error404 /> },
+  ]);
+
   return (
-    <>
-      {" "}
-      <AuthNavbar></AuthNavbar>
-      <div className="main flex ">
-        <div className="w-3/12">
+    <div className="h-screen flex flex-col">
+      {/* HEADER */}
+      <div className="h-14 border- bg-mist-700 shadow">
+        <AuthNavbar />
+      </div>
+
+      {/* BODY */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* SIDEBAR */}
+        <div className="max-w-50 ease-linear  overflow-y-auto bg-mist-700 text-white ">
           <NavBar />
         </div>
-        <div>
-          {useRoutes([
-            { path: "/", element: <Home /> },
-            { path: "/login", element: <Login /> },
-            { path: "/student/*", element: <StudentRoutes /> },
-            { path: "/book/*", element: <BookRoutes /> },
-            { path: "/user/*", element: <UserRoutes /> },
-            { path: "/notes/*", element: <NotesRoutes /> },
-            { path: "/*", element: <Error404 /> },
-          ])}
+
+        {/* MAIN CONTENT */}
+        <div className="flex-1 overflow-y-auto m-0.5 p-4 bg-gray-300">
+          {routes}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
