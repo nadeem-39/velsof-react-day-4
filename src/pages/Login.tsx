@@ -54,7 +54,7 @@ export default function Login() {
   };
 
   return (
-    <Card className="w-100 mt-10">
+    <Card className="w-100 m-auto bg-gray-200 ring-0">
       <CardHeader>
         <CardContent className="font-bold">Book Form</CardContent>
       </CardHeader>
@@ -70,8 +70,7 @@ export default function Login() {
                 placeholder="Enter Email"
                 className={"border rounded p-1"}
               ></Input>
-              {(formState.errors.root?.message ||
-                getFieldState("email").invalid) && (
+              {(formState.errors.email || getFieldState("email").invalid) && (
                 <FieldError className="text-red-500">
                   {formState.errors?.email?.message || "Enter Valid Email"}
                 </FieldError>
@@ -86,7 +85,7 @@ export default function Login() {
                 type="password"
                 className={"border rounded p-1"}
               ></Input>
-              {(formState.errors.root?.message ||
+              {(formState.errors.password ||
                 getFieldState("password").invalid) && (
                 <FieldError className="text-red-500">
                   {formState.errors?.password?.message || "Enter Password"}

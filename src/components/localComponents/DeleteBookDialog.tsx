@@ -39,10 +39,10 @@ const DeleteBookDialog = (book: bookDataTemplate): ReactElement => {
     <AlertDialog>
       <AlertDialogTrigger
         key={book.id}
-        className="   p-2 pl-5 pr-5 rounded cursor-pointer"
+        className=" cursor-pointer"
         onClick={() => {}}
       >
-        🚫
+        🚮
       </AlertDialogTrigger>
       <AlertDialogContent className={"bg-gray-100"}>
         <AlertDialogHeader>

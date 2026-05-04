@@ -22,7 +22,7 @@ const NavBar = (): ReactElement => {
     <div className="ml-2 mt-5 mr-2 sidebar w-8/12">
       {!sidebarCollapsed && (
         <Button
-          className={" rounded  text-left cursor-pointer "}
+          className={" rounded  text-left cursor-pointer"}
           onClick={() => toggleSidebar()}
         >
           <svg
@@ -43,7 +43,7 @@ const NavBar = (): ReactElement => {
       {sidebarCollapsed && (
         <div className=" p-5 rounded w-full ">
           <Button
-            className="p-2 mt-2 rounded w-40 text-left m-auto cursor-pointer"
+            className="p-2 mt-2 rounded w-40  m-auto cursor-pointer  hover:bg-mist-600 text-center "
             onClick={() => {
               navigate("/");
               setLastVisitedPage("/");
@@ -52,7 +52,7 @@ const NavBar = (): ReactElement => {
             Home
           </Button>
           <Button
-            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 hover:bg-mist-600 text-center m-auto cursor-pointer"
             onClick={() => {
               navigate("/student/list");
               setLastVisitedPage("/student/list");
@@ -61,7 +61,7 @@ const NavBar = (): ReactElement => {
             Student list
           </Button>
           <Button
-            className={`p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer `}
+            className={`p-2 mt-2  rounded w-40 hover:bg-mist-600 text-center m-auto cursor-pointer `}
             onClick={() => {
               navigate("/book/list");
               setLastVisitedPage("/book/list");
@@ -70,7 +70,7 @@ const NavBar = (): ReactElement => {
             Book list
           </Button>
           <Button
-            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 hover:bg-mist-600 text-center m-auto cursor-pointer"
             onClick={() => {
               navigate("/book/addNewBook");
               setLastVisitedPage("/book/addNewBook");
@@ -79,7 +79,7 @@ const NavBar = (): ReactElement => {
             Add new Book
           </Button>
           <Button
-            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 hover:bg-mist-600 text-center m-auto cursor-pointer"
             onClick={() => {
               navigate("/user/allUsers");
               setLastVisitedPage("/user/allUsers");
@@ -88,7 +88,7 @@ const NavBar = (): ReactElement => {
             Users...
           </Button>
           <Button
-            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 hover:bg-mist-600 text-center m-auto cursor-pointer"
             onClick={() => {
               navigate("/notes/list");
               setLastVisitedPage("/notes/list");
@@ -98,7 +98,7 @@ const NavBar = (): ReactElement => {
           </Button>
 
           <Button
-            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 hover:bg-mist-600 text-center m-auto cursor-pointer"
             onClick={() => {
               navigate("/notes/addNewNote");
               setLastVisitedPage("/notes/addNewNote");
@@ -108,7 +108,7 @@ const NavBar = (): ReactElement => {
           </Button>
 
           <Button
-            className="p-2 mt-2  rounded w-40 text-left m-auto cursor-pointer"
+            className="p-2 mt-2  rounded w-40 hover:bg-mist-600 text-center m-auto cursor-pointer"
             onClick={() => {
               toggleSidebar();
             }}

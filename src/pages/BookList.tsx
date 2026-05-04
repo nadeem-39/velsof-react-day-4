@@ -48,7 +48,7 @@ const BookList = (): ReactElement => {
 
   // console.log(page, limit);
 
-  console.log(pagination.pageIndex, pagination.pageSize);
+  // console.log(pagination.pageIndex, pagination.pageSize);
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -97,7 +97,7 @@ const BookList = (): ReactElement => {
       header: "Edit",
       cell: ({ row }) => {
         const book = row.original;
-        return <EditBookDialog {...book}>✏️</EditBookDialog>;
+        return <EditBookDialog {...book} />;
       },
     },
     {
@@ -105,7 +105,7 @@ const BookList = (): ReactElement => {
       header: "Delete",
       cell: ({ row }) => {
         const book = row.original;
-        return <DeleteBookDialog {...book}>🚫</DeleteBookDialog>;
+        return <DeleteBookDialog {...book} />;
       },
     },
   ];

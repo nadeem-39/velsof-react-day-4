@@ -92,7 +92,7 @@ const NotesAddForm = () => {
 
   return (
     <div className="mt-10 flex justify-center text-center">
-      <Card className="w-150 ring-0 bg-gray-200">
+      <Card className="w-150 ring-0 bg-gray-100">
         <CardHeader>
           <CardContent className="font-bold">Notes Form</CardContent>
         </CardHeader>
@@ -128,7 +128,7 @@ const NotesAddForm = () => {
                     placeholder="Enter Title"
                     type="text"
                   ></Input>
-                  {(formState.errors.root?.message ||
+                  {(formState.errors.title ||
                     getFieldState("title").invalid) && (
                     <FieldError className="text-red-500">
                       {formState.errors?.title?.message ||
@@ -144,7 +144,7 @@ const NotesAddForm = () => {
                     placeholder="Enter Content "
                     type="text"
                   ></Input>
-                  {(formState.errors.root?.message ||
+                  {(formState.errors.content ||
                     getFieldState("content").invalid) && (
                     <FieldError className="text-red-500">
                       {formState.errors?.content?.message ||

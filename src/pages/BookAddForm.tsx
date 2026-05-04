@@ -101,8 +101,7 @@ const BookAddForm = () => {
                     placeholder="Enter Book id"
                     type="number"
                   ></Input>
-                  {(formState.errors.root?.message ||
-                    getFieldState("id").invalid) && (
+                  {(formState.errors.id || getFieldState("id").invalid) && (
                     <FieldError className="text-red-500">
                       {formState.errors?.id?.message ||
                         "Id can not be less than 1"}
@@ -117,7 +116,7 @@ const BookAddForm = () => {
                     placeholder="Enter Title "
                     type="text"
                   ></Input>
-                  {(formState.errors.root?.message ||
+                  {(formState.errors.title ||
                     getFieldState("title").invalid) && (
                     <FieldError className="text-red-500">
                       {formState.errors?.title?.message ||
@@ -133,7 +132,7 @@ const BookAddForm = () => {
                     placeholder="Enter book author's name"
                     type="text"
                   ></Input>
-                  {(formState.errors.root?.message ||
+                  {(formState.errors.author ||
                     getFieldState("author").invalid) && (
                     <FieldError className="text-red-500">
                       {formState.errors?.author?.message ||

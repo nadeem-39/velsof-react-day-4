@@ -23,7 +23,7 @@ function App() {
   return (
     <div className="h-screen flex flex-col">
       {/* HEADER */}
-      <div className="h-14 border- bg-mist-700 shadow">
+      <div className="h-14 border- bg-mist-700">
         <AuthNavbar />
       </div>
 
