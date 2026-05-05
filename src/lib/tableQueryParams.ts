@@ -4,7 +4,7 @@ export function tableQueryParams() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const page = Number(searchParams.get("page") || 1);
-  const limit = Number(searchParams.get("limit") || 10);
+  const limit = Number(searchParams.get("limit") || 5);
   const sort = searchParams.get("sort") || "";
   const search = searchParams.get("search") || "";
 

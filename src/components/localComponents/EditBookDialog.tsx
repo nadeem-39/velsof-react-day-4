@@ -62,9 +62,10 @@ const EditBookDialog = (book: bookDataTemplate): ReactElement => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting, isValid },
     setError,
     reset,
+    getFieldState,
   } = useForm<formSchema>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -110,73 +111,91 @@ const EditBookDialog = (book: bookDataTemplate): ReactElement => {
     <Dialog>
       <DialogTrigger
         render={
-          <Button onClick={() => reset()} className={"cursor-pointer"}>
-            ✏️
-          </Button>
+          <button
+            onClick={() => reset()}
+            className={"cursor-pointer bg-white rounded text-primary"}
+          >
+            <i className="mdi mdi-pencil"></i>
+          </button>
         }
       />
-      <DialogContent className="sm:max-w-sm bg-white">
-        <DialogHeader>
-          <DialogTitle>Edit Book </DialogTitle>
-          <DialogDescription>Make changes in Book Data</DialogDescription>
-        </DialogHeader>
+      <DialogContent className=" bg-white">
+        <div className="bg-soft-primary">
+          <div className="row">
+            <div className="col-12">
+              <div className="text-primary p-4">
+                <h5 className="text-primary">Edit Book Form</h5>
+                <p>Edit Book</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="book-id">Book ID</FieldLabel>
-              <Input
-                id="book-id"
-                {...register("id", { valueAsNumber: true })}
-                placeholder="Enter Book id"
-                type="number"
-                defaultValue={book.id}
-              ></Input>
-              {errors.id && (
-                <FieldError className="text-red-500">
-                  {errors?.id?.message || "Id can not be less than 1"}
-                </FieldError>
-              )}
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="book-title">Book Title</FieldLabel>
-              <Input
-                id="book-title"
-                {...register("title")}
-                placeholder="Enter Title "
-                type="text"
-                defaultValue={book.title}
-              ></Input>
-              {errors.title && (
-                <FieldError className="text-red-500">
-                  {errors?.title?.message ||
-                    "Book name can not be less than 8 char"}
-                </FieldError>
-              )}
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="book-author">Author Name</FieldLabel>
-              <Input
-                id="book-author"
-                {...register("author")}
-                placeholder="Enter book author's name"
-                type="text"
-                defaultValue={book.author}
-              ></Input>
-              {errors.author && (
-                <FieldError className="text-red-500">
-                  {errors?.author?.message ||
-                    "Author name can not be less than 3 char"}
-                </FieldError>
-              )}
-              {errors.root && <FieldError>{errors?.root?.message}</FieldError>}
-            </Field>
-          </FieldGroup>
-          <Button
+          <div className="form-group">
+            <label htmlFor="book-id">Book Id</label>
+
+            <input
+              id="book-id"
+              {...register("id", {
+                valueAsNumber: true,
+              })}
+              placeholder="Enter Book id"
+              type="number"
+              className="form-control"
+              defaultValue={book.id}
+            ></input>
+            {(errors.id || getFieldState("id").invalid) && (
+              <p className="text-red-500">
+                {errors?.id?.message || "Id can not be less than 1"}
+              </p>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="book-title">Title</label>
+
+            <input
+              id="book-title"
+              {...register("title")}
+              placeholder="Enter Title "
+              type="text"
+              className="form-control"
+              defaultValue={book.title}
+            ></input>
+            {(errors.title || getFieldState("title").invalid) && (
+              <p className="text-red-500">
+                {errors?.title?.message ||
+                  "Book name can not be less than 8 char"}
+              </p>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="book-author">Author Name</label>
+
+            <input
+              id="book-author"
+              {...register("author")}
+              placeholder="Enter book author's name"
+              className="form-control"
+              type="text"
+              defaultValue={book.author}
+            ></input>
+            {(errors.author || getFieldState("author").invalid) && (
+              <p className="text-red-500">
+                {errors?.author?.message ||
+                  "Author name can not be less than 3 char"}
+              </p>
+            )}
+            {errors.root?.message && <p>{errors?.author?.message}</p>}
+          </div>
+
+          <button
+            className="btn btn-primary btn-block waves-effect waves-light"
             type="submit"
-            className={"bg-blue-500 p-2 border-black text-white mt-4"}
+            disabled={isSubmitting || !isValid}
           >
-            Save changes
-          </Button>
+            {" "}
+            {isSubmitting ? "Loading" : "Submit"}{" "}
+          </button>
         </form>
         <DialogFooter>
           <DialogClose render={<Button variant="outline">Cancel</Button>} />

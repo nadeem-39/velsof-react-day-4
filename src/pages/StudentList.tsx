@@ -90,101 +90,232 @@ const StudentList = (): ReactElement => {
     );
   if (error) return <span>Error please try again</span>;
 
+  // return (
+  //   <div className="place-items-center">
+  //     <div className="mt-5 flex justify-center">
+  //       <Card className="p-4 w-250 ring-0 bg-gray-100">
+  //         <CardHeader className="items-center text-center">
+  //           <CardTitle className="text-4xl font-bold">Students List</CardTitle>
+  //           <CardContent className="flex justify-between">
+  //             <Input
+  //               className="w-50 border-gray-300"
+  //               placeholder="Enter Student Name"
+  //               onChange={(e) => {
+  //                 setSearchValue(e.target.value);
+  //               }}
+  //               value={searchValue + ""}
+  //             ></Input>
+  //             <Button
+  //               className=" w-25 bg-blue-500 text-white cursor-pointer"
+  //               onClick={() => {
+  //                 setView(!view);
+  //               }}
+  //             >
+  //               {view ? "Hide list" : "View list"}{" "}
+  //             </Button>
+  //           </CardContent>
+  //         </CardHeader>
+  //         {searchValue && searchStudent.length == 0 ? (
+  //           <p>No Student matched your search.</p>
+  //         ) : view ? (
+  //           <>
+  //             {searchValue && (
+  //               <p>
+  //                 Showing {searchStudent.length} of{" "}
+  //                 {currStudentData?.length}{" "}
+  //               </p>
+  //             )}
+  //             <CardContent className="overflow-y-auto h-full">
+  //               <Table>
+  //                 <TableHeader className="sticky top-0 ">
+  //                   <TableRow className="bg-black text-white">
+  //                     <TableHead className="w-50 text-center">
+  //                       Student ID
+  //                     </TableHead>
+  //                     <TableHead className="w-50 text-center">
+  //                       Student Name
+  //                     </TableHead>
+  //                     <TableHead className="w-50 text-center">
+  //                       Student Age
+  //                     </TableHead>
+  //                     <TableHead className="w-50 text-center">View</TableHead>
+  //                   </TableRow>
+  //                 </TableHeader>
+  //                 <TableBody>
+  //                   {(searchValue ? searchStudent : currStudentData)?.map(
+  //                     (student) => (
+  //                       <TableRow
+  //                         key={student.id}
+  //                         className="border-gray-200"
+  //                         // className={student.id & 1 ? "" : "bg-gray-300 "}
+  //                       >
+  //                         <TableCell className="text-center">
+  //                           {student.id}
+  //                         </TableCell>
+  //                         <TableCell className="text-center">
+  //                           {student.title}
+  //                         </TableCell>
+  //                         <TableCell className={`text-center `}>
+  //                           {student.age}
+  //                         </TableCell>
+  //                         <TableCell
+  //                           className="text-center cursor-pointer"
+  //                           onClick={() => {
+  //                             navigate(`/student/${student.id}`);
+  //                           }}
+  //                         >
+  //                           <Button
+  //                             className={
+  //                               "bg-green-500 text-white w-10 h-5 text-xs"
+  //                             }
+  //                           >
+  //                             {" "}
+  //                             view
+  //                           </Button>
+  //                         </TableCell>
+  //                       </TableRow>
+  //                     ),
+  //                   )}
+  //                 </TableBody>
+  //               </Table>
+  //             </CardContent>
+  //             <p className="text-center">A list of 50 students</p>
+  //           </>
+  //         ) : (
+  //           <p>Click above button to view Student list</p>
+  //         )}
+  //       </Card>
+  //     </div>
+  //   </div>
+  // );
+
   return (
-    <div className="place-items-center">
-      <div className="mt-5 flex justify-center">
-        <Card className="p-4 w-250 ring-0 bg-gray-100">
-          <CardHeader className="items-center text-center">
-            <CardTitle className="text-4xl font-bold">Students List</CardTitle>
-            <CardContent className="flex justify-between">
-              <Input
-                className="w-50 border-gray-300"
-                placeholder="Enter Student Name"
-                onChange={(e) => {
-                  setSearchValue(e.target.value);
-                }}
-                value={searchValue + ""}
-              ></Input>
-              <Button
-                className=" w-25 bg-blue-500 text-white cursor-pointer"
-                onClick={() => {
-                  setView(!view);
-                }}
-              >
-                {view ? "Hide list" : "View list"}{" "}
-              </Button>
-            </CardContent>
-          </CardHeader>
-          {searchValue && searchStudent.length == 0 ? (
-            <p>No Student matched your search.</p>
-          ) : view ? (
-            <>
-              {searchValue && (
-                <p>
-                  Showing {searchStudent.length} of{" "}
-                  {currStudentData?.length}{" "}
-                </p>
-              )}
-              <CardContent className="overflow-y-auto h-full">
-                <Table>
-                  <TableHeader className="sticky top-0 ">
-                    <TableRow className="bg-black text-white">
-                      <TableHead className="w-50 text-center">
-                        Student ID
-                      </TableHead>
-                      <TableHead className="w-50 text-center">
-                        Student Name
-                      </TableHead>
-                      <TableHead className="w-50 text-center">
-                        Student Age
-                      </TableHead>
-                      <TableHead className="w-50 text-center">View</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {(searchValue ? searchStudent : currStudentData)?.map(
-                      (student) => (
-                        <TableRow
-                          key={student.id}
-                          className="border-gray-200"
-                          // className={student.id & 1 ? "" : "bg-gray-300 "}
-                        >
-                          <TableCell className="text-center">
-                            {student.id}
-                          </TableCell>
-                          <TableCell className="text-center">
-                            {student.title}
-                          </TableCell>
-                          <TableCell className={`text-center `}>
-                            {student.age}
-                          </TableCell>
-                          <TableCell
-                            className="text-center cursor-pointer"
-                            onClick={() => {
-                              navigate(`/student/${student.id}`);
-                            }}
-                          >
-                            <Button
-                              className={
-                                "bg-green-500 text-white w-10 h-5 text-xs"
-                              }
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-12">
+          <div className="page-title-box d-flex align-items-center justify-content-between">
+            <h4 className="mb-0 font-size-18">Students List</h4>
+          </div>
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title mb-4">Filter</h5>
+
+              <div className="row">
+                <div className="col-lg-4 col-md-4">
+                  <label className="sr-only">Search</label>
+                  <div className="input-group mb-2 mr-sm-3">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">
+                        <i className="mdi mdi-magnify"></i>
+                      </div>
+                    </div>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="inlineFormSearchl2"
+                      placeholder="Enter Student Name"
+                      onChange={(e) => {
+                        setSearchValue(e.target.value);
+                      }}
+                      value={searchValue + ""}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-lg-8 col-md-8 text-right">
+                  <button
+                    className=" w-25 btn btn-primary "
+                    onClick={() => {
+                      setView(!view);
+                    }}
+                  >
+                    {view ? "Hide list" : "View list"}{" "}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="card">
+            <div className="card-body">
+              <div className="TableHeader">
+                <div className="row">
+                  <div className="col-lg-3">
+                    <h4 className="card-title">Students</h4>
+                  </div>
+                </div>
+              </div>
+              {searchValue && searchStudent.length == 0 ? (
+                <p>No Student matched your search.</p>
+              ) : view ? (
+                <>
+                  {searchValue && (
+                    <p>
+                      Showing {searchStudent.length} of{" "}
+                      {currStudentData?.length}{" "}
+                    </p>
+                  )}
+                  <div className="table-responsive">
+                    <table
+                      className="table mb-0 listingData dt-responsive"
+                      id="datatable"
+                    >
+                      <thead>
+                        <tr>
+                          <th className="text-center">Student ID</th>
+                          <th className="text-center">Student Name</th>
+                          <th className="text-center">Student Age</th>
+                          <th className="text-center">View</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(searchValue ? searchStudent : currStudentData)?.map(
+                          (student) => (
+                            <tr
+                              key={student.id}
+                              className="border-gray-200"
+                              // className={student.id & 1 ? "" : "bg-gray-300 "}
                             >
-                              {" "}
-                              view
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ),
-                    )}
-                  </TableBody>
-                </Table>
-              </CardContent>
-              <p className="text-center">A list of 50 students</p>
-            </>
-          ) : (
-            <p>Click above button to view Student list</p>
-          )}
-        </Card>
+                              <td className="text-center">{student.id}</td>
+                              <td className="text-center">{student.title}</td>
+                              <td className={`text-center `}>{student.age}</td>
+                              <td
+                                className="text-center cursor-pointer"
+                                onClick={() => {
+                                  navigate(`/student/${student.id}`);
+                                }}
+                              >
+                                <button
+                                  className={
+                                    "bg-green-500 text-white w-10 h-5 text-xs rounded"
+                                  }
+                                >
+                                  {" "}
+                                  view
+                                </button>
+                              </td>
+                            </tr>
+                          ),
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : (
+                <p>Click above button to view Student list</p>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

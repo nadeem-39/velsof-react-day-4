@@ -99,35 +99,82 @@ const UserAccount = () => {
   //   console.log(userPosts?.data);
 
   return (
-    <div>
-      <Card className="w-200 m-auto mt-10 ring-0 bg-gray-200">
-        <CardHeader>
-          <CardTitle>{currUserData?.name}</CardTitle>
-          <CardDescription>
-            Total count of Post is {currPostData && currPostData.length}{" "}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableCaption>Post Table</TableCaption>
-            <TableHeader>
-              <TableRow className="bg-gray-400">
-                <TableHead className="w-80 text-center">Post Title</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {currPostData?.map((post: Post) => (
-                <TableRow
-                  key={post.id}
-                  className={post.id & 1 ? "" : "bg-gray-300"}
-                >
-                  <TableCell className="text-center">{post.title}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+    // <div>
+    //   <Card className="w-200 m-auto mt-10 ring-0 bg-gray-200">
+    //     <CardHeader>
+    //       <CardTitle>{currUserData?.name}</CardTitle>
+    //       <CardDescription>
+    //         Total count of Post is {currPostData && currPostData.length}{" "}
+    //       </CardDescription>
+    //     </CardHeader>
+    //     <CardContent>
+    //       <Table>
+    //         <TableCaption>Post Table</TableCaption>
+    //         <TableHeader>
+    //           <TableRow className="bg-gray-400">
+    //             <TableHead className="w-80 text-center">Post Title</TableHead>
+    //           </TableRow>
+    //         </TableHeader>
+    //         <TableBody>
+    //           {currPostData?.map((post: Post) => (
+    //             <TableRow
+    //               key={post.id}
+    //               className={post.id & 1 ? "" : "bg-gray-300"}
+    //             >
+    //               <TableCell className="text-center">{post.title}</TableCell>
+    //             </TableRow>
+    //           ))}
+    //         </TableBody>
+    //       </Table>
+    //     </CardContent>
+    //   </Card>
+    // </div>
+
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-12">
+          <div className="page-title-box d-flex align-items-center justify-content-between">
+            <h4 className="mb-0 font-size-18">User Profile</h4>
+          </div>
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="card">
+            <div className="card-body">
+              <div className="TableHeader">
+                <div className="row">
+                  <div className="col-lg-3">
+                    <h4 className="card-title">{currUserData?.name}</h4>
+                    <h4 className="card-title">
+                      Total Post {currPostData?.length}
+                    </h4>
+                  </div>
+                </div>
+              </div>
+
+              <table
+                className="table mb-0 listingData dt-responsive"
+                id="datatable"
+              >
+                <thead>
+                  <tr>
+                    <th className="text-center">User Posts</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currPostData?.map((post: Post) => (
+                    <tr key={post.id}>
+                      <td className="text-center">{post.title}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

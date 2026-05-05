@@ -1,14 +1,3 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
-
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import instance from "@/lib/api";
@@ -81,89 +70,105 @@ const BookAddForm = () => {
   });
 
   return (
-    <div className="mt-10 flex justify-center text-center">
-      <Card className="w-150 ring-0 bg-gray-100">
-        <CardHeader>
-          <CardContent className="font-bold ">Book Form</CardContent>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <FieldGroup>
-              <FieldDescription>Fill all the required details</FieldDescription>
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="book-id">Book ID</FieldLabel>
-                  <Input
-                    id="book-id"
-                    {...register("id", {
-                      valueAsNumber: true,
-                    })}
-                    placeholder="Enter Book id"
-                    type="number"
-                  ></Input>
-                  {(formState.errors.id || getFieldState("id").invalid) && (
-                    <FieldError className="text-red-500">
-                      {formState.errors?.id?.message ||
-                        "Id can not be less than 1"}
-                    </FieldError>
-                  )}
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="book-title">Book Title</FieldLabel>
-                  <Input
-                    id="book-title"
-                    {...register("title")}
-                    placeholder="Enter Title "
-                    type="text"
-                  ></Input>
-                  {(formState.errors.title ||
-                    getFieldState("title").invalid) && (
-                    <FieldError className="text-red-500">
-                      {formState.errors?.title?.message ||
-                        "Book name can not be less than 8 char"}
-                    </FieldError>
-                  )}
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="book-author">Author Name</FieldLabel>
-                  <Input
-                    id="book-author"
-                    {...register("author")}
-                    placeholder="Enter book author's name"
-                    type="text"
-                  ></Input>
-                  {(formState.errors.author ||
-                    getFieldState("author").invalid) && (
-                    <FieldError className="text-red-500">
-                      {formState.errors?.author?.message ||
-                        "Author name can not be less than 3 char"}
-                    </FieldError>
-                  )}
-                  {formState.errors.root?.message && (
-                    <FieldError>{formState.errors?.author?.message}</FieldError>
-                  )}
-                </Field>
-              </FieldGroup>
-            </FieldGroup>
-            <Button
-              className="border-1-black mt-5 mr-10 w-25 bg-blue-500 text-white"
-              onClick={() => {
-                reset();
-              }}
-            >
-              Reset
-            </Button>
-            <Button
-              className="border-1-black mt-5 w-25 bg-blue-500 text-white"
-              type="submit"
-              disabled={formState.isSubmitting || !formState.isValid}
-            >
-              {" "}
-              {formState.isSubmitting ? "Loading" : "Submit"}{" "}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6 col-xl-8">
+          <div className="card overflow-hidden">
+            <div className="bg-soft-primary">
+              <div className="row">
+                <div className="col-12">
+                  <div className="text-primary p-4">
+                    <h5 className="text-primary">Book Form</h5>
+                    <p>Add a new book</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="card-body pt-0">
+              <div className="p-4">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="form-group">
+                    <label htmlFor="book-id">Book Id*</label>
+
+                    <input
+                      id="book-id"
+                      {...register("id", {
+                        valueAsNumber: true,
+                      })}
+                      placeholder="Enter Book id"
+                      type="number"
+                      className="form-control"
+                    ></input>
+                    {(formState.errors.id || getFieldState("id").invalid) && (
+                      <p className="text-red-500">
+                        {formState.errors?.id?.message ||
+                          "Id can not be less than 1"}
+                      </p>
+                    )}
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="book-title">Title*</label>
+
+                    <input
+                      id="book-title"
+                      {...register("title")}
+                      placeholder="Enter Title "
+                      type="text"
+                      className="form-control"
+                    ></input>
+                    {(formState.errors.title ||
+                      getFieldState("title").invalid) && (
+                      <p className="text-red-500">
+                        {formState.errors?.title?.message ||
+                          "Book name can not be less than 8 char"}
+                      </p>
+                    )}
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="book-author">Author Name*</label>
+
+                    <input
+                      id="book-author"
+                      {...register("author")}
+                      placeholder="Enter book author's name"
+                      className="form-control"
+                      type="text"
+                    ></input>
+                    {(formState.errors.author ||
+                      getFieldState("author").invalid) && (
+                      <p className="text-red-500">
+                        {formState.errors?.author?.message ||
+                          "Author name can not be less than 3 char"}
+                      </p>
+                    )}
+                    {formState.errors.root?.message && (
+                      <p>{formState.errors?.author?.message}</p>
+                    )}
+                  </div>
+
+                  <button
+                    className="btn btn-primary btn-block waves-effect waves-light"
+                    onClick={() => {
+                      reset();
+                    }}
+                  >
+                    Reset
+                  </button>
+
+                  <button
+                    className="btn btn-primary btn-block waves-effect waves-light"
+                    type="submit"
+                    disabled={formState.isSubmitting || !formState.isValid}
+                  >
+                    {" "}
+                    {formState.isSubmitting ? "Loading" : "Submit"}{" "}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

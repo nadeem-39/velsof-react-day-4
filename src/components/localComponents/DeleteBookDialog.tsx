@@ -39,15 +39,18 @@ const DeleteBookDialog = (book: bookDataTemplate): ReactElement => {
     <AlertDialog>
       <AlertDialogTrigger
         key={book.id}
-        className=" cursor-pointer"
+        className=" cursor-pointer text-danger"
         onClick={() => {}}
       >
-        🚮
+        <i className="mdi mdi-circle-off-outline"></i>
       </AlertDialogTrigger>
       <AlertDialogContent className={"bg-gray-100"}>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you sure you want to delete {book.title}
+            <p className="text-xl">
+              Are you sure you want to delete{" "}
+              <span className="text-red-700">{book.title}</span>
+            </p>
           </AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -56,6 +59,7 @@ const DeleteBookDialog = (book: bookDataTemplate): ReactElement => {
             onClick={() => {
               deleteStudentMutatation.mutate(book.id);
             }}
+            className={"btn btn-primary"}
           >
             Continue
           </AlertDialogAction>
